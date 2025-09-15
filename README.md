@@ -1,5 +1,28 @@
-# SatisfactoryTools
+# Self-hosted fork of SatisfactoryTools
+
 Satisfactory Tools for planning and building the perfect base.
+
+Deploy anywhere you want. Your factories will be stored in the server, not in the browser, so you can access them from any device.
+
+## docker-compose
+
+```yaml
+services:
+  satisfactory_tools:
+    image: ghcr.io/benjuan26/satisfactory-tools:latest
+    container_name: satisfactory-tools
+    ports:
+      - 3000:3000
+    volumes:
+      - /path/to/satisfactory-tools-data:/data
+    restart: unless-stopped
+```
+
+Then access from the same machine with `localhost:3000`, or elsewhere in your network with `host-ip:3000`. Production tabs will be stored in a JSON file at the path you provide to the docker bind mount.
+
+### original README contents
+
+---
 
 ## Requirements
 - node.js version 16 (lower may work, 17+ doesn't work)
