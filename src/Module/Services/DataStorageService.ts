@@ -1,21 +1,36 @@
-import angular, {IWindowService} from 'angular';
+import { IProductionData } from '@src/Tools/Production/IProductionData';
+import axios from 'axios';
 
 export class DataStorageService
 {
-
-	public static $inject = ['$window'];
-
-	public constructor(private readonly $window: IWindowService) {}
+	public constructor() {}
 
 	public saveData(key: string, data: any)
 	{
-		this.$window.localStorage.setItem(key, angular.toJson(data));
+		axios({
+			method: 'put',
+			url: `/api/store/${key}`,
+			data,
+		})
 	}
 
-	public loadData(key: string, def: any)
+	public loadData(key: string, def: IProductionData[] | null): Promise<IProductionData[] | null>
 	{
-		const item = this.$window.localStorage.getItem(key);
-		return item === null ? def : angular.fromJson(item);
+		return new Promise((resolve) => {
+			axios({
+				method: 'get',
+				url: `/api/store/${key}`
+			}).then((response) => {
+				console.log(response);
+				if (response.data) {
+					resolve(response.data);
+				} else {
+					resolve(def);
+				}
+			}).catch(() => {
+				resolve(def);
+			});
+		});
 	}
 
 }

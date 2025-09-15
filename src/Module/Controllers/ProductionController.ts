@@ -64,8 +64,9 @@ export class ProductionController
 		scope.saveState = () => {
 			this.saveState();
 		};
-		this.loadState();
+
 		$timeout(() => {
+			this.loadState().then(() => { scope.$apply(); });
 			const query = this.$location.search();
 			if ('share' in query) {
 				axios({
@@ -256,21 +257,26 @@ export class ProductionController
 		this.dataStorageService.saveData(this.storageKey, save);
 	}
 
-	private loadState(): void
+	private loadState(): Promise<void>
 	{
-		const loaded = this.dataStorageService.loadData(this.storageKey, null);
-		if (loaded === null) {
-			this.addEmptyTab();
-		} else {
-			for (const item of loaded) {
-				this.tabs.push(new ProductionTab(this.scope, this.$rootScope.version, item));
-			}
-			if (this.tabs.length) {
-				this.tab = this.tabs[0];
-			} else {
-				this.addEmptyTab();
-			}
-		}
+		return new Promise<void>((resolve) => {
+			this.dataStorageService.loadData(this.storageKey, null)
+				.then((loaded) => {
+					if (loaded === null) {
+						this.addEmptyTab();
+					} else {
+						for (const item of loaded) {
+							this.tabs.push(new ProductionTab(this.scope, this.$rootScope.version, item));
+						}
+						if (this.tabs.length) {
+							this.tab = this.tabs[0];
+						} else {
+							this.addEmptyTab();
+						}
+					}
+					resolve();
+				});
+		});
 	}
 
 }

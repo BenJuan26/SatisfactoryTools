@@ -10,6 +10,6 @@ COPY . .
 
 RUN yarn build
 
-FROM nginx
+FROM ghcr.io/benjuan26/restful-storage:latest
 
-COPY --from=builder /app/www /usr/share/nginx/html
+COPY --from=builder /app/www /www
