@@ -14,7 +14,10 @@ services:
     ports:
       - 3000:3000
     volumes:
+      # the location on the host machine to store the production data
       - /path/to/satisfactory-tools-data:/data
+      # instructions for generating the images are in the main repo, https://github.com/greeny/SatisfactoryTools?tab=readme-ov-file#updating-icons
+      - /path/to/game/item/images:/www/assets/images/items:ro
     restart: unless-stopped
 ```
 
