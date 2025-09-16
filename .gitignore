@@ -16,3 +16,6 @@ yarn-error.log
 
 # Generated sources
 www/assets/app.js
+
+# Copyrighted images
+www/assets/images/items
